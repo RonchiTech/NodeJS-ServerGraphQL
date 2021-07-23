@@ -64,6 +64,11 @@ module.exports = {
     return { token, userId: user._id.toString() };
   },
   createPost: async function ({ postInput }, req) {
+    if (!req.isAuth) {
+      const error = new Error('Not Authenticated!');
+      error.code = 401;
+      throw error;
+    }
     const errors = [];
     if (
       validator.isEmpty(
@@ -85,12 +90,20 @@ module.exports = {
       error.code = 422;
       throw error;
     }
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error('User not found!');
+      error.code = 401;
+      throw error;
+    }
     const post = await new Post({
       title: postInput.title,
       content: postInput.content,
       imageUrl: postInput.imageUrl,
+      creator: user,
     });
     const createdPost = await post.save();
+    user.post.push(createdPost);
     return {
       ...createdPost._doc,
       _id: createdPost._id.toString(),
