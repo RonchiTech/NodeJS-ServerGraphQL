@@ -103,7 +103,8 @@ module.exports = {
       creator: user,
     });
     const createdPost = await post.save();
-    user.post.push(createdPost);
+    console.log('CREATED POST', createdPost);
+    user.posts.push(createdPost);
     return {
       ...createdPost._doc,
       _id: createdPost._id.toString(),
