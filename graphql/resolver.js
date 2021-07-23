@@ -119,8 +119,9 @@ module.exports = {
       error.code = 401;
       throw error;
     }
-    const totalPosts = await Post.find().countDocuments;
+    const totalPosts = await Post.find().countDocuments();
     const posts = await Post.find().sort({ createdAt: -1 }).populate('creator');
+    console.log('FETCHED totalPosts', totalPosts);
     return {
       posts: posts.map((p) => {
         return {
