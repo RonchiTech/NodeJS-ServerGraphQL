@@ -28,7 +28,7 @@ module.exports = buildSchema(`
 
     input PostInputData {
         title: String!
-        imageUrl: String
+        imageUrl: String!
         content: String!
         
     }
